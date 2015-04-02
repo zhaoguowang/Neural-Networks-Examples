@@ -89,8 +89,10 @@ for epoch = 1:epochs
   trainset_CE = 0;
   % LOOP OVER MINI-BATCHES.
   for m = 1:numbatches
-    %input_batch: numwords X batchsize
+    %input_batch: numwords X batchsize = 3 X 100
     input_batch = train_input(:, :, m);
+
+    %target_batch: numwords X batchsize = 1 X 100
     target_batch = train_target(:, :, m);
 
     % FORWARD PROPAGATE.
@@ -103,8 +105,11 @@ for epoch = 1:epochs
 
     % COMPUTE DERIVATIVE.
     %% Expand the target to a sparse 1-of-K vector.
+    % vocab_size X batchsize = 250 X 100
     expanded_target_batch = expansion_matrix(:, target_batch);
+
     %% Compute derivative of cross-entropy loss function.
+    % vocab_size X batchsize = 250 X 100
     error_deriv = output_layer_state - expanded_target_batch;
 
     % MEASURE LOSS FUNCTION.
@@ -125,15 +130,21 @@ for epoch = 1:epochs
 
     % BACK PROPAGATE.
     %% OUTPUT LAYER.
+    % 200 X 250
     hid_to_output_weights_gradient =  hidden_layer_state * error_deriv';
     output_bias_gradient = sum(error_deriv, 2);
+
+    % 200 X 100 
     back_propagated_deriv_1 = (hid_to_output_weights * error_deriv) ...
       .* hidden_layer_state .* (1 - hidden_layer_state);
 
     %% HIDDEN LAYER.
     % FILL IN CODE. Replace the line below by one of the options.
     %embed_to_hid_weights_gradient = zeros(numhid1 * numwords, numhid2);
+
+    % 150 X 200
     embed_to_hid_weights_gradient = embedding_layer_state * back_propagated_deriv_1';
+
     % Options:
     % (a) embed_to_hid_weights_gradient = back_propagated_deriv_1' * embedding_layer_state;
     % (b) embed_to_hid_weights_gradient = embedding_layer_state * back_propagated_deriv_1';
@@ -151,7 +162,10 @@ for epoch = 1:epochs
 
     % FILL IN CODE. Replace the line below by one of the options.
     %back_propagated_deriv_2 = zeros(numhid2, batchsize);
+
+    % (numwords * numhid1) X batchsize = 150 X 100
     back_propagated_deriv_2 = embed_to_hid_weights * back_propagated_deriv_1;
+
     % Options
     % (a) back_propagated_deriv_2 = embed_to_hid_weights * back_propagated_deriv_1;
     % (b) back_propagated_deriv_2 = back_propagated_deriv_1 * embed_to_hid_weights;
