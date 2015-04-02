@@ -48,6 +48,7 @@ embedding_layer_state = reshape(...
   word_embedding_weights(reshape(input_batch, 1, []),:)',...
   numhid1 * numwords, []);
 
+
 %% COMPUTE STATE OF HIDDEN LAYER.
 % Compute inputs to hidden units.
 % numhid2 X batchsize = 200 X 100
