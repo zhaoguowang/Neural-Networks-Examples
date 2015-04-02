@@ -40,19 +40,27 @@ numhid2 = size(embed_to_hid_weights, 2);
 
 %% COMPUTE STATE OF WORD EMBEDDING LAYER.
 % Look up the inputs word indices in the word_embedding_weights matrix.
+
+%reshape(input_batch, 1, []): 1 X 300
+%word_embedding_weights(reshape(input_batch, 1, []),:)'': 300 X 50
+%embedding_layer_state: (numhid1 * numwords) X batchsize = 150 X 100
 embedding_layer_state = reshape(...
   word_embedding_weights(reshape(input_batch, 1, []),:)',...
   numhid1 * numwords, []);
 
 %% COMPUTE STATE OF HIDDEN LAYER.
 % Compute inputs to hidden units.
+% numhid2 X batchsize = 200 X 100
 inputs_to_hidden_units = embed_to_hid_weights' * embedding_layer_state + ...
   repmat(hid_bias, 1, batchsize);
 
 % Apply logistic activation function.
 % FILL IN CODE. Replace the line below by one of the options.
 %hidden_layer_state = zeros(numhid2, batchsize);
+
+% numhid2 X batchsize = 200 X 100
 hidden_layer_state = 1 ./ (1 + exp(-inputs_to_hidden_units));
+
 % Options
 % (a) hidden_layer_state = 1 ./ (1 + exp(inputs_to_hidden_units));
 % (b) hidden_layer_state = 1 ./ (1 - exp(-inputs_to_hidden_units));
@@ -63,7 +71,11 @@ hidden_layer_state = 1 ./ (1 + exp(-inputs_to_hidden_units));
 % Compute inputs to softmax.
 % FILL IN CODE. Replace the line below by one of the options.
 %inputs_to_softmax = zeros(vocab_size, batchsize);
+
+
+% vocab_size X batchsize = 250 X 100
 inputs_to_softmax = hid_to_output_weights' * hidden_layer_state +  repmat(output_bias, 1, batchsize);
+
 % Options
 % (a) inputs_to_softmax = hid_to_output_weights' * hidden_layer_state +  repmat(output_bias, 1, batchsize);
 % (b) inputs_to_softmax = hid_to_output_weights' * hidden_layer_state +  repmat(output_bias, batchsize, 1);
@@ -82,5 +94,6 @@ inputs_to_softmax = inputs_to_softmax...
 output_layer_state = exp(inputs_to_softmax);
 
 % Normalize to get probability distribution.
+% vocab_size X batchsize = 250 X 100
 output_layer_state = output_layer_state ./ repmat(...
   sum(output_layer_state, 1), vocab_size, 1);

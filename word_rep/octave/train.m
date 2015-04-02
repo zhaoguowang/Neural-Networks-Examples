@@ -31,22 +31,54 @@ show_validation_CE_after = 1000;
 [train_input, train_target, valid_input, valid_target, ...
   test_input, test_target, vocab] = load_data(batchsize);
 [numwords, batchsize, numbatches] = size(train_input); 
+
 vocab_size = size(vocab, 2);
 
+%numwords = 3
+%numbatches = samples/batchsize
+%train_input: numwords X batchsize X numbatches
+%train_target: numwords X batchsize X numbatches
+
+
 % INITIALIZE WEIGHTS AND BIASES.
+
+%vocab_size X numhid1 = 250 X 50
 word_embedding_weights = init_wt * randn(vocab_size, numhid1);
+
+%(numwords * numhid1) X numhid2 = 150 X 200
 embed_to_hid_weights = init_wt * randn(numwords * numhid1, numhid2);
+
+%numhid2 X vocab_size = 200 X 250
 hid_to_output_weights = init_wt * randn(numhid2, vocab_size);
+
+% numhid2 X 1 = 200 X 1
 hid_bias = zeros(numhid2, 1);
+
+%vocab X 1 = 250 X 1
 output_bias = zeros(vocab_size, 1);
 
+%vocab_size X numhid1 = 250 X 50
 word_embedding_weights_delta = zeros(vocab_size, numhid1);
+
+%vocab_size X numhid1 = 250 X 50
 word_embedding_weights_gradient = zeros(vocab_size, numhid1);
+
+%(numwords * numhid1) X numhid2 = 150 X 200
 embed_to_hid_weights_delta = zeros(numwords * numhid1, numhid2);
+
+%numhid2 X vocab_size = 200 X 250
 hid_to_output_weights_delta = zeros(numhid2, vocab_size);
+
+% numhid2 X 1 = 200 X 1
 hid_bias_delta = zeros(numhid2, 1);
+
+%vocab X 1 = 250 X 1
 output_bias_delta = zeros(vocab_size, 1);
+
+%vocab X vocab = 250 X 250
 expansion_matrix = eye(vocab_size);
+
+
 count = 0;
 tiny = exp(-30);
 
@@ -57,6 +89,7 @@ for epoch = 1:epochs
   trainset_CE = 0;
   % LOOP OVER MINI-BATCHES.
   for m = 1:numbatches
+    %input_batch: numwords X batchsize
     input_batch = train_input(:, :, m);
     target_batch = train_target(:, :, m);
 
