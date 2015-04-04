@@ -22,17 +22,3 @@ def load(N):
     R = collections.namedtuple('data', ['train_input', 'train_target', 'valid_input', 'valid_target', 'test_input', 'test_target', 'vocab'], verbose=True)
     res = R(train_input, train_target, valid_input, valid_target, test_input, test_target, vocab)
     return res
-
-
- # Gather our code in a main() function
-def main():
-    res = load(100)
-    print 'Hello there', res.train_input
-
-
-
-
-# Standard boilerplate to call the main() function to begin
-# the program.
-if __name__ == '__main__':
-    main()
