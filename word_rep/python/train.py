@@ -29,9 +29,14 @@ show_validation_CE_after = 1000
 [numwords, batchsize, numbatches] = train_input.shape 
 vocab_size = vocab.size
 
-word_embedding_weights = init_wt * np.random.randn(vocab_size, numhid1)
-embed_to_hid_weights = init_wt * np.random.randn(numwords * numhid1, numhid2)
-hid_to_output_weights = init_wt * np.random.randn(numhid2, vocab_size)
+#word_embedding_weights = init_wt * np.random.randn(vocab_size, numhid1)
+#embed_to_hid_weights = init_wt * np.random.randn(numwords * numhid1, numhid2)
+#hid_to_output_weights = init_wt * np.random.randn(numhid2, vocab_size)
+
+word_embedding_weights = init_wt * np.ones((vocab_size, numhid1))
+embed_to_hid_weights = init_wt * np.ones((numwords * numhid1, numhid2))
+hid_to_output_weights = init_wt * np.ones((numhid2, vocab_size))
+
 
 hid_bias = np.zeros((numhid2, 1))
 output_bias = np.zeros((vocab_size, 1))
@@ -86,7 +91,7 @@ def train(epochs):
   			this_chunk_CE = this_chunk_CE + (CE - this_chunk_CE) / count
 			trainset_CE = trainset_CE + (CE - trainset_CE) / (m + 1)
 
-			print '\rBatch', m, 'Train CE', this_chunk_CE 		
+			print '\rBatch', m, 'Train CE', this_chunk_CE, 		
 
 			if (m + 1) % show_training_CE_after == 0:
 				print '\n'
