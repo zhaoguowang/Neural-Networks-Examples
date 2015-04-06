@@ -83,7 +83,7 @@ def train(epochs):
         	    	output_bias)
 	        
   			#print 'xxxx', output_layer_state.shape, target_batch.shape
-  			expanded_target_batch = expansion_matrix[:, target_batch].reshape(vocab_size, batchsize)
+  			expanded_target_batch = expansion_matrix[:, target_batch.ravel()]
   			error_deriv = output_layer_state - expanded_target_batch
   			CE = -np.sum(np.sum(expanded_target_batch * np.log(output_layer_state + tiny))) / batchsize
   			global count
@@ -150,7 +150,7 @@ def train(epochs):
 				fprop(valid_input, word_embedding_weights, embed_to_hid_weights, \
 					hid_to_output_weights, hid_bias, output_bias);
 				datasetsize = valid_input.shape[1]
-				expanded_valid_target = expansion_matrix[:, valid_target].reshape(vocab_size, datasetsize)
+				expanded_valid_target = expansion_matrix[:, valid_target.ravel()]
 				CE = -np.sum(np.sum(expanded_valid_target * np.log(output_layer_state + tiny))) /datasetsize
 				print' Validation CE : ', CE
     
