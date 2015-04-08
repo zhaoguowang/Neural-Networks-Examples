@@ -1,0 +1,173 @@
+%-----------------------------------------------------------------------------
+%
+%               Template for sigplanconf LaTeX Class
+%
+% Name:         sigplanconf-template.tex
+%
+% Purpose:      A template for sigplanconf.cls, which is a LaTeX 2e class
+%               file for SIGPLAN conference proceedings.
+%
+% Guide:        Refer to "Author's Guide to the ACM SIGPLAN Class,"
+%               sigplanconf-guide.pdf
+%
+% Author:       Paul C. Anagnostopoulos
+%               Windfall Software
+%               978 371-2316
+%               paul@windfall.com
+%
+% Created:      15 February 2005
+%
+%-----------------------------------------------------------------------------
+
+
+%\documentclass[10pt,twocolumn, nocopyrightspace]{sigplanconf} %OSDI template
+
+%http://www.acm.org/sigs/publications/proceedings-templates#aL1
+%\documentclass[preprint]{acm_proc_article-sp} %SIMODE Restrict Template
+%\documentclass{sig-alternate} %SIMODE Tighter Template
+%\documentclass[letter,twocolumn,10pt]{article}
+%\usepackage{usenix}
+\documentclass[10pt, preprint]{sigplanconf}
+
+
+% The following \documentclass options may be useful:
+
+% preprint      Remove this option only once the paper is in final form.
+% 10pt          To set in 10-point type instead of 9-point.
+% 11pt          To set in 11-point type instead of 9-point.
+% authoryear    To obtain author/year citation style instead of numeric.
+
+\usepackage{amsmath,epsfig}
+\usepackage{color}
+\usepackage{balance}
+\usepackage{xspace}
+\usepackage{listings}
+\usepackage[linesnumbered, boxed,lined,ruled]{algorithm2e}
+\DontPrintSemicolon 
+%\usepackage[font=small, skip=5pt]{caption}
+
+%\newcommand{\subparagraph}{}
+%\usepackage[compact]{titlesec}
+
+%\usepackage[affil-sl]{authblk}
+\usepackage{amssymb,amsmath, mathtools}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{caption}
+
+\usepackage{subcaption}
+\usepackage{titlesec}
+\titlespacing*{\section}
+{0pt}{4ex plus 1ex minus .2ex}{4.3ex plus .2ex}
+\titlespacing*{\subsection}
+{0pt}{4ex plus 1ex minus .2ex}{4.3ex plus .2ex}
+
+
+\newcommand\KW[1]{\textbf{#1}} %keyword
+
+\newcommand\red[1]{\textcolor{red}{#1}}
+\newcommand\blue[1]{\textcolor{blue}{#1}}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\DeclarePairedDelimiter\norm\lVert\rVert
+
+\newcommand{\comment}[2]{{\bf[\textcolor{red}{#1}: \textcolor{blue}{#2}]}}
+
+\newcommand{\ZG}[1]{{\comment{Zhaoguo}{#1}}}
+\newcommand{\JY}[1]{{\comment{Jinyang}{#1}}}
+\newcommand{\sys}{{\sffamily WPNN}\xspace}
+
+
+
+\authorinfo{}{}
+
+
+\begin{document}
+
+
+% Uncomment one of the following two, if you are not going for the 
+% traditional copyright transfer agreement.
+
+%\exclusivelicense                % ACM gets exclusive license to publish, 
+                                  % you retain copyright
+
+%\permissiontopublish             % ACM gets nonexclusive license to publish
+                                  % (paid open-access papers, 
+                                  % short abstracts)
+
+%\titlebanner{banner above paper title}        % These are ignored unless
+%\preprintfooter{short description of paper}   % 'preprint' option specified.
+
+\title{Word Prediction}
+\maketitle
+
+%\subtitle{Subtitle Text, if any}
+
+%\authorinfo{}{}
+
+%\authorinfo{}{}
+
+
+%no page numbers for final version.
+\thispagestyle{empty}
+\pagestyle{empty}  
+
+\input abstract
+
+%\category{CR-number}{subcategory}{third-level}
+
+% general terms are not compulsory anymore, 
+% you may leave them out
+%\terms
+%term1, term2
+%
+%\keywords
+%keyword1, keyword2
+\sloppy
+
+\input intro
+
+%\input{ack}
+
+%\nocite{*}
+
+%\appendix
+%\section{Appendix Title}
+%
+%This is the text of the appendix, if you need one.
+%
+%\acks
+%
+%Acknowledgments, if needed.
+
+% We recommend abbrvnat bibliography style.
+
+\balance
+
+{\footnotesize \bibliographystyle{abbrv}
+\bibliography{wordpred}}
+
+
+%\bibliographystyle{abbrvnat}
+
+% The bibliography should be embedded for final submission.
+
+%\begin{thebibliography}{}
+%\softraggedright
+
+%\bibitem[Smith et~al.(2009)Smith, Jones]{smith02}
+%P. Q. Smith, and X. Y. Jones. ...reference text...
+
+%\end{thebibliography}
+
+
+\end{document}
+
+%                       Revision History
+%                       -------- -------
+%  Date         Person  Ver.    Change
+%  ----         ------  ----    ------
+
+%  2013.06.29   TU      0.1--4  comments on permission/copyright notices
+
