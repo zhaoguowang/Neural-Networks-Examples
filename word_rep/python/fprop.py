@@ -29,6 +29,8 @@ def fprop(input_batch, word_embedding_weights, embed_to_hid_weights, \
 
 	output_layer_state = np.exp(inputs_to_softmax)
 
-	output_layer_state = output_layer_state/np.sum(output_layer_state)
+	output_layer_state = output_layer_state/np.tile(np.sum(output_layer_state, axis = 0), (vocab_size, 1))
+
+	#print 'output_layer_state', output_layer_state[0,0], output_layer_state[0,1], output_layer_state[0,2], output_layer_state.shape
 
 	return (embedding_layer_state, hidden_layer_state, output_layer_state)
