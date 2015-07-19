@@ -85,6 +85,10 @@ expansion_matrix = eye(vocab_size);
 count = 0;
 tiny = exp(-30);
 
+
+gradient_file_name = "embed_to_hid_weights_gradient.info"
+gradient_file_id = fopen(gradient_file_name, "a");
+
 % TRAIN.
 for epoch = 1:epochs
   fprintf(1, 'Epoch %d\n', epoch);
@@ -138,7 +142,7 @@ for epoch = 1:epochs
     output_bias_gradient = sum(error_deriv, 2);
 
     % if e == 100
-    	save -append  output_bias_gradient.mat  output_bias_gradient  
+    %	save -append  output_bias_gradient.info  output_bias_gradient  
     % end
 
     % 200 X 100 
@@ -146,7 +150,7 @@ for epoch = 1:epochs
       .* hidden_layer_state .* (1 - hidden_layer_state);
 
     % if e == 100
-    	save -append   back_propagated_deriv_1.mat   back_propagated_deriv_1 
+    %	save -append  back_propagated_deriv_1.info   back_propagated_deriv_1 
     % end
 
     %% HIDDEN LAYER.
@@ -157,7 +161,9 @@ for epoch = 1:epochs
     embed_to_hid_weights_gradient = embedding_layer_state * back_propagated_deriv_1';
     
     % if e == 100
-    	save -append  embed_to_hid_weights_gradient.mat  embed_to_hid_weights_gradient 
+      fprintf(gradient_file_id, "epoch:%d batch:%d row:%d column:%d \n", epoch, m, 150, 200);
+      fdisp(gradient_file_id, embed_to_hid_weights_gradient)
+    	% save -append  gradient_file_name  embed_to_hid_weights_gradient;
     % end
 
     % Options:
@@ -170,7 +176,7 @@ for epoch = 1:epochs
     %hid_bias_gradient = zeros(numhid2, 1);
     hid_bias_gradient = sum(back_propagated_deriv_1, 2);
 
-    %save -append hid_bias_gradient.mat hid_bias_gradient
+    %save -append hid_bias_gradient.info hid_bias_gradient
 
     % Options
     % (a) hid_bias_gradient = sum(back_propagated_deriv_1, 2);
@@ -185,7 +191,7 @@ for epoch = 1:epochs
     back_propagated_deriv_2 = embed_to_hid_weights * back_propagated_deriv_1;
 
     % if e == 100
-    	save -append back_propagated_deriv_2.mat back_propagated_deriv_2
+    %	save -append back_propagated_deriv_2.info back_propagated_deriv_2
     % end
 
     % Options
@@ -203,7 +209,7 @@ for epoch = 1:epochs
     end
 
     % if e == 100
-    	save -append  word_embedding_weights_gradient.mat  word_embedding_weights_gradient
+    %	save -append  word_embedding_weights_gradient.info  word_embedding_weights_gradient
     % end
    
     % UPDATE WEIGHTS AND BIASES.
@@ -259,6 +265,8 @@ if OctaveMode
   fflush(1);
 end
 fprintf(1, 'Final Training CE %.3f\n', trainset_CE);
+
+fclose(gradient_file_id);
 
 % EVALUATE ON VALIDATION SET.
 fprintf(1, '\rRunning validation ...');
