@@ -43,16 +43,16 @@ vocab_size = size(vocab, 2);
 % INITIALIZE WEIGHTS AND BIASES.
 
 %vocab_size X numhid1 = 250 X 50
-%word_embedding_weights = init_wt * randn(vocab_size, numhid1);
-word_embedding_weights = init_wt * ones(vocab_size, numhid1);
+word_embedding_weights = init_wt * randn(vocab_size, numhid1);
+%word_embedding_weights = init_wt * ones(vocab_size, numhid1);
 
 %(numwords * numhid1) X numhid2 = 150 X 200
-%embed_to_hid_weights = init_wt * randn(numwords * numhid1, numhid2);
-embed_to_hid_weights = init_wt * ones(numwords * numhid1, numhid2);
+embed_to_hid_weights = init_wt * randn(numwords * numhid1, numhid2);
+%embed_to_hid_weights = init_wt * ones(numwords * numhid1, numhid2);
 
 %numhid2 X vocab_size = 200 X 250
-%hid_to_output_weights = init_wt * randn(numhid2, vocab_size);
-hid_to_output_weights = init_wt * ones(numhid2, vocab_size);
+hid_to_output_weights = init_wt * randn(numhid2, vocab_size);
+%hid_to_output_weights = init_wt * ones(numhid2, vocab_size);
 
 % numhid2 X 1 = 200 X 1
 hid_bias = zeros(numhid2, 1);
@@ -137,9 +137,17 @@ for epoch = 1:epochs
     hid_to_output_weights_gradient =  hidden_layer_state * error_deriv';
     output_bias_gradient = sum(error_deriv, 2);
 
+    % if e == 100
+    	save -append  output_bias_gradient.mat  output_bias_gradient  
+    % end
+
     % 200 X 100 
     back_propagated_deriv_1 = (hid_to_output_weights * error_deriv) ...
       .* hidden_layer_state .* (1 - hidden_layer_state);
+
+    % if e == 100
+    	save -append   back_propagated_deriv_1.mat   back_propagated_deriv_1 
+    % end
 
     %% HIDDEN LAYER.
     % FILL IN CODE. Replace the line below by one of the options.
@@ -147,6 +155,10 @@ for epoch = 1:epochs
 
     % 150 X 200
     embed_to_hid_weights_gradient = embedding_layer_state * back_propagated_deriv_1';
+    
+    % if e == 100
+    	save -append  embed_to_hid_weights_gradient.mat  embed_to_hid_weights_gradient 
+    % end
 
     % Options:
     % (a) embed_to_hid_weights_gradient = back_propagated_deriv_1' * embedding_layer_state;
@@ -157,6 +169,9 @@ for epoch = 1:epochs
     % FILL IN CODE. Replace the line below by one of the options.
     %hid_bias_gradient = zeros(numhid2, 1);
     hid_bias_gradient = sum(back_propagated_deriv_1, 2);
+
+    %save -append hid_bias_gradient.mat hid_bias_gradient
+
     % Options
     % (a) hid_bias_gradient = sum(back_propagated_deriv_1, 2);
     % (b) hid_bias_gradient = sum(back_propagated_deriv_1, 1);
@@ -168,6 +183,10 @@ for epoch = 1:epochs
 
     % (numwords * numhid1) X batchsize = 150 X 100
     back_propagated_deriv_2 = embed_to_hid_weights * back_propagated_deriv_1;
+
+    % if e == 100
+    	save -append back_propagated_deriv_2.mat back_propagated_deriv_2
+    % end
 
     % Options
     % (a) back_propagated_deriv_2 = embed_to_hid_weights * back_propagated_deriv_1;
@@ -182,7 +201,11 @@ for epoch = 1:epochs
          expansion_matrix(:, input_batch(w, :)) * ...
          (back_propagated_deriv_2(1 + (w - 1) * numhid1 : w * numhid1, :)');
     end
-    
+
+    % if e == 100
+    	save -append  word_embedding_weights_gradient.mat  word_embedding_weights_gradient
+    % end
+   
     % UPDATE WEIGHTS AND BIASES.
     word_embedding_weights_delta = ...
       momentum .* word_embedding_weights_delta + ...

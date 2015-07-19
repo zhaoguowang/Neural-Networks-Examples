@@ -29,13 +29,13 @@ show_validation_CE_after = 1000
 [numwords, batchsize, numbatches] = train_input.shape 
 vocab_size = vocab.size
 
-#word_embedding_weights = init_wt * np.random.randn(vocab_size, numhid1)
-#embed_to_hid_weights = init_wt * np.random.randn(numwords * numhid1, numhid2)
-#hid_to_output_weights = init_wt * np.random.randn(numhid2, vocab_size)
+word_embedding_weights = init_wt * np.random.randn(vocab_size, numhid1)
+embed_to_hid_weights = init_wt * np.random.randn(numwords * numhid1, numhid2)
+hid_to_output_weights = init_wt * np.random.randn(numhid2, vocab_size)
 
-word_embedding_weights = init_wt * np.ones((vocab_size, numhid1))
-embed_to_hid_weights = init_wt * np.ones((numwords * numhid1, numhid2))
-hid_to_output_weights = init_wt * np.ones((numhid2, vocab_size))
+#word_embedding_weights = init_wt * np.ones((vocab_size, numhid1))
+#embed_to_hid_weights = init_wt * np.ones((numwords * numhid1, numhid2))
+#hid_to_output_weights = init_wt * np.ones((numhid2, vocab_size))
 
 
 hid_bias = np.zeros((numhid2, 1))
@@ -91,10 +91,10 @@ def train(epochs):
   			this_chunk_CE = this_chunk_CE + (CE - this_chunk_CE) / count
 			trainset_CE = trainset_CE + (CE - trainset_CE) / (m + 1)
 
-			print '\rBatch', m, 'Train CE', this_chunk_CE, 		
+			print '\rBatch', (m + 1), 'Train CE', this_chunk_CE, 		
 
 			if (m + 1) % show_training_CE_after == 0:
-				print '\n'
+				print ''
 				count = 0
 				this_chunk_CE = 0
 
@@ -120,7 +120,6 @@ def train(epochs):
 				expanded_input_batch = expanded_input_batch.dot(expanded_back_propagated_deriv_2)
 				#print expanded_input_batch.shape
 				word_embedding_weights_gradient = word_embedding_weights_gradient + expanded_input_batch
-
 			word_embedding_weights_delta = momentum * word_embedding_weights_delta \
 			+ word_embedding_weights_gradient / batchsize
 			word_embedding_weights = word_embedding_weights - learning_rate * word_embedding_weights_delta
@@ -144,8 +143,8 @@ def train(epochs):
 			output_bias_delta = momentum * output_bias_delta + output_bias_gradient.reshape(output_bias_gradient.size, -1) / batchsize
 			output_bias = output_bias - learning_rate * output_bias_delta;
 
-			if m % show_validation_CE_after == 0:
-				print '\rRunning validation'
+			if (m + 1) % show_validation_CE_after == 0:
+				print '\rRunning validation ...',
 				[embedding_layer_state, hidden_layer_state, output_layer_state] = \
 				fprop(valid_input, word_embedding_weights, embed_to_hid_weights, \
 					hid_to_output_weights, hid_bias, output_bias);
